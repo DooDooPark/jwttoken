@@ -8,7 +8,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const dbconnect = require('./models/index');
-const authRoutes = require('./routes/authRoutes')
+const authRoutes = require('./routes/authRoutes');
+const { checkUser } = require('./middleware/authMiddleware');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 dbconnect();
+app.get('*', checkUser);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(authRoutes);
